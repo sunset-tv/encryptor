@@ -1,0 +1,175 @@
+<html>
+<head>
+  <TITLE>HTML Code Encryptor from ISDN*tek</TITLE>
+  <LINK REL="SHORTCUT ICON" href="http://www.isdntek.com/favicon.ico"></link>
+  <META NAME="description" CONTENT="Encrypt HTML using simple javascipt functions">
+  <META NAME="keywords" CONTENT="ISDN*tek, HTML encryption, HTML decryption">
+
+<script language=javascript>
+<!--
+var quot="'"
+var fullenc=false
+
+function Encrypt() {
+ 	if (fullenc) {EncryptAll()} else {EncryptBasic()}
+}
+
+function EncryptBasic(){
+	var NewCode=escape(document.getElementById('InputArea').value)
+	NewCode='<'+'script language=javascript>document.write(unescape('+quot
+		+ NewCode+quot+ '))<'+'/script>\n'
+	document.getElementById('OutputArea').value = NewCode
+	FileSizes()
+}
+
+function EncryptAll() {NewCode=""
+	var OldCode=document.getElementById('InputArea').value
+	for (var i=0; i<OldCode.length; i++){NewCode=NewCode+Hex(OldCode.charCodeAt(i))}
+	NewCode='<'+'script language=javascript>document.write(unescape('+quot
+		+ NewCode+quot+ '))<'+'/script>\n'    	
+	document.getElementById('OutputArea').value = NewCode
+	FileSizes()
+	//--adds linebreak after encoded block.
+	// the added linebreaks prevent preview in interim decoding, 
+	//  but will view in final decoding 
+}
+
+function Decrypt() {
+	var NewCode=unescape(document.getElementById('InputArea').value)
+	NewCode=NewCode.replace("<script language=javascript>document.write(unescape('","")
+	//NewCode=NewCode.replace("\n'))<"+"/script>","")
+	NewCode=NewCode.replace("'))<"+"/script>","")
+	document.getElementById('OutputArea').value = NewCode
+	FileSizes()
+}
+
+function Hex(dec){
+	var hexbase="0123456789ABCDEF"
+	hx_hi=dec/16; hx_lo=dec%16;
+        hx=hexbase.substr(hx_hi,1)+hexbase.substr(hx_lo,1)
+	hexval='%'+hx
+	return hexval;
+}
+
+function FileSizes() {
+	document.getElementById('topSize').innerHTML= 
+	document.getElementById('InputArea').value.length
+	document.getElementById('bottomSize').innerHTML= 
+	document.getElementById('OutputArea').value.length
+
+}
+
+function Preview(selection) {
+	FileSizes()
+	var newpage=""
+	if (selection==0) {newpage=document.getElementById('InputArea').value
+  	  var w0 = window.open("","popup0","width=600,height=350,directories=no,menubar=yes,status=yes,toolbar=yes,resizable=yes,scrollbars=yes,screenY=0,top=0,screenX=80,left=80" );
+    	  w0.document.writeln("<html><title>Top Window Preview</title><body>" );
+  	  w0.document.writeln(newpage);
+  	  w0.document.writeln("<hr><form><center><input type=\"submit\" value=\"Close Window\" onClick=\"window.close();return false; \"></center></form>" );
+  	  w0.document.writeln("</body></html>" );
+  	  w0.document.close() ;
+  	  w0.document.focus(true)
+	}
+	else {selection=1; newpage=document.getElementById('OutputArea').value
+  	  var w1 = window.open("","popup1","width=600,height=350,directories=no,menubar=yes,status=yes,toolbar=yes,resizable=yes,scrollbars=yes,screenY=0,top=0,screenX=80,left=80" );
+  	  w1.document.writeln("<html><title>Bottom Window Preview</title><body>" );
+  	  w1.document.writeln(newpage);
+  	  w1.document.writeln("<hr><form><center><input type=\"submit\" value=\"Close Window\" onClick=\"window.close();return false; \"></center></form>" );
+  	  w1.document.writeln("</body></html>" );
+  	  w1.document.close() ;
+  	  w1.document.focus(true)
+	}
+}
+
+-->
+</script>
+</head>
+
+<body style="font-family:arial, sans-serif" text="#000000" bgcolor="#e8e8e8" >
+
+
+<hr>
+
+
+   <center><h1>
+    <font color=#205070><b>HTML Code Encryptor/Decryptor</b></font></h1>
+
+   </center>
+<table align="center" width="95%" cellspacing="0" cellpadding="0" border="0" >
+<tr ><td colspan=3>
+<font size=+1 color=#205070>Use Escape-Code Encryption to protect auction templates from casual theft or to prevent codes from being rewritten by code editors such as FrontPage, TurboLister, and eBay's input forms. 
+<br /><br />
+<font size=-1>This tool generates javascript code, which may not run on all browsers. <br />
+This tool is not for circumventing eBay's coding restrictions.<br />
+Code encrypted by this tool can be decrypted by this tool - but other codes may not decrypt here.<br />
+This tool uses popup windows for the previews. In some cases the preview window may be behind this screen.
+</font></font>
+
+</td></tr>
+<tr ><td style="height:20">&nbsp;</td></tr>
+
+<tr >
+<td valign=top>
+<b>Encode HTML:</b><ol>
+<li>Enter HTML in top window</li>
+<li>Click Encode and copy encrypted code from bottom window.</li></ol>
+<span title="slightly larger file"><input type=radio name=enctype checked onclick="fullenc=false">basic encoding</span> &nbsp;&nbsp;
+<span title="file will be three times larger"><input type=radio name=enctype onclick="fullenc=true">full encoding</span>
+
+</td><td style="width:30">&nbsp;</td><td valign=top>
+<b>Decode  HTML:</b><ol>
+<li>Enter encrypted HTML in top window</li>
+<li>Click Decode and copy standard HTML from bottom window.</li></ol>
+</td>
+</tr>
+
+</table>
+
+
+<center>
+<textarea  id=InputArea name=InputArea 
+	style="width:95%; height:300; padding:5" 
+	onchange="FileSizes()" onkeyup="FileSizes()" onmouseup="FileSizes()"></textarea>
+<table align="center" width="95%" cellspacing="0" cellpadding="3" border="0" >
+<tr style="font-family:arial, sans serif; font-size:14px">
+<td id=topSize align=center >0</td>
+<td align=center ><input type=button value="Preview&uarr;" onclick="Preview(0)"></td>
+<td align=center >&uarr; Original Code</td>
+<td align=center><input type=button value="Encode" onclick="Encrypt()"> </td>
+<td align=center><input type=button value="Decode" onclick="Decrypt()"></td>
+<td align=center >Converted Code &darr;</td>
+
+<td align=center ><input type=button value="Preview&darr;" onclick="Preview(1)"></td>
+<td id=bottomSize align=center>0</td>
+</tr>
+</table>
+
+<textarea  id=OutputArea name=OutputArea 
+	style="width:95%; height:300; padding:5" 
+	onchange="FileSizes()" onkeyup="FileSizes()" onmouseup="FileSizes()"></textarea>
+</center>
+<center><input type="button" 
+	onclick="document.getElementById('OutputArea').select();
+	document.getElementById('OutputArea').focus();"
+	value=" Select All " />
+</center>
+<br />
+
+
+<br>
+
+<p align=center  style="font-size:12px; font-family:sans-serif" >
+courtesy of eBay user <a href=http://members.ebay.com/aboutme/shipscript target=_blank>shipscript<img src=http://pics.ebaystatic.com/aw/pics/aboutme-small.gif border=0 hspace=5></a>
+<br>
+copyright 2005 &copy; <a href=http://www.isdntek.com/etools.htm target=blank>www.isdntek.com/etools.htm</a>
+<br /><br />
+<img src=http://counters.honesty.com/cgi-bin/honesty-counter.cgi?df=gen.8726587.00011><br>
+<font size=-1>Free <a href=http://www.andale.com>Andale</a> counters.<br></font>
+
+</p>
+
+</body>
+</html>
+
+
